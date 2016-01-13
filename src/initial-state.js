@@ -1,7 +1,8 @@
 module.exports = function(){
     return {
-        auth: {
-            loggedIn: false
+        cart: {
+            items: [],
+            totalAmount:0
         }
     }
 };

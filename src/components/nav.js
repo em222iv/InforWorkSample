@@ -1,37 +1,31 @@
 import { connect } from 'react-redux';
 import React, { PropTypes, Component } from 'react';
-import AppBar from 'material-ui/lib/app-bar';
-import IconButton from 'material-ui/lib/icon-button';
-import NavMenu from 'material-ui/lib/svg-icons/navigation/expand-less';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
-import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import Cart from './cart'
 
 //import actions from '../actions';
 
 
 class Nav extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {open: false};
+    }
+
+    handleToggle = () => this.setState({open: !this.state.open});
+
+    handleClose = () => this.setState({open: false});
+
     render() {
         return (
             <nav>
-                <AppBar
-                    title="Title"
-                    iconElementLeft={<IconButton><NavMenu /></IconButton>}
-                    iconElementRight={
-                      <IconMenu
-                        iconButtonElement={
-                          <IconButton><MoreVertIcon /></IconButton>
-                        }
-                        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                      >
-                        <MenuItem primaryText="Refresh" />
-                        <MenuItem primaryText="Help" />
-                        <MenuItem primaryText="Sign out" />
-                      </IconMenu>
-                    }
-                />
+                <div className="row">
+                    <div className="nav-item"><a href="">My Cart</a></div>
+                    <div className="nav-item"><a href="">My Account</a></div>
+                    <div className="nav-item"><a href="">Currency($)</a></div>
+                    <div className="nav-item"><a href="">Language(EN)</a></div>
+                </div>
+                <Cart />
             </nav>
         );
     }

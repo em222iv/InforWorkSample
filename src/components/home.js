@@ -18,7 +18,6 @@ Home.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth.loggedIn
     }
 
 };
