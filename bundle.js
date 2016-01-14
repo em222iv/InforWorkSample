@@ -30335,7 +30335,10 @@
 	    return {
 	        cart: {
 	            items: [],
-	            subtotalAmount: 0
+	            subtotalAmount: 0,
+	            totalQuantity: 0,
+	            unavalableItems: [],
+	            open: false
 	        },
 	        products: {
 	            items: []
@@ -30366,15 +30369,8 @@
 	var cartReducer = function cartReducer(state, action) {
 	    var newState = Object.assign({}, state);
 	    switch (action.type) {
-	        case 'GET-ALL':
-	            newState.items = action.items;
-	            return newState;
-	        case 'REM':
-	            newState.items = action.cart;
-	            console.log(newState.items);
-	            return newState;
-	        case 'INC':
-	            newState.items = action.cart;
+	        case 'UPDATE':
+	            newState.cart = action.cart;
 	            return newState;
 	        default:
 	            return state || (0, _initialState2.default)().cart;
@@ -30409,9 +30405,6 @@
 	        case 'GET-PRODUCTS':
 	            newState.items = action.items;
 	            return newState;
-	        case 'ADD-TO-CART':
-	            newState.items = action.cart;
-	            return newState;
 	        default:
 	            return state || (0, _initialState2.default)().products;
 	    }
@@ -30444,13 +30437,17 @@
 	
 	var _wrap2 = _interopRequireDefault(_wrap);
 	
-	var _home = __webpack_require__(425);
+	var _home = __webpack_require__(426);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _products = __webpack_require__(426);
+	var _products = __webpack_require__(427);
 	
 	var _products2 = _interopRequireDefault(_products);
+	
+	var _checkout = __webpack_require__(429);
+	
+	var _checkout2 = _interopRequireDefault(_checkout);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -30458,7 +30455,8 @@
 	    _reactRouter.Route,
 	    { path: '/', component: _wrap2.default },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'products', component: _products2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'products', component: _products2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'checkout', component: _checkout2.default })
 	);
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "routes.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
@@ -30489,7 +30487,7 @@
 	
 	var _nav2 = _interopRequireDefault(_nav);
 	
-	var _header = __webpack_require__(424);
+	var _header = __webpack_require__(425);
 	
 	var _header2 = _interopRequireDefault(_header);
 	
@@ -30606,7 +30604,7 @@
 	                    { className: 'row' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'logo' },
+	                        { id: 'logo' },
 	                        _react2.default.createElement(
 	                            'a',
 	                            { href: '' },
@@ -30622,7 +30620,7 @@
 	                            _react2.default.createElement(
 	                                _reactRouter.Link,
 	                                { to: 'products' },
-	                                'Products'
+	                                'PRODUCTS'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -30631,7 +30629,7 @@
 	                            _react2.default.createElement(
 	                                _reactRouter.Link,
 	                                { to: '/' },
-	                                'Logout'
+	                                'CAMPAIGNS & PROMOTIONS'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -30640,7 +30638,7 @@
 	                            _react2.default.createElement(
 	                                'a',
 	                                { href: '' },
-	                                'About Us'
+	                                'ABOUT US'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -30649,7 +30647,7 @@
 	                            _react2.default.createElement(
 	                                'a',
 	                                { href: '' },
-	                                'Brands'
+	                                'BRANDS'
 	                            )
 	                        )
 	                    )
@@ -30701,7 +30699,11 @@
 	
 	var _cartItem2 = _interopRequireDefault(_cartItem);
 	
-	var _cartActions = __webpack_require__(423);
+	var _warning = __webpack_require__(423);
+	
+	var _warning2 = _interopRequireDefault(_warning);
+	
+	var _cartActions = __webpack_require__(424);
 	
 	var _cartActions2 = _interopRequireDefault(_cartActions);
 	
@@ -30720,22 +30722,31 @@
 	var Cart = function (_Component) {
 	    _inherits(Cart, _Component);
 	
-	    function Cart(props) {
+	    function Cart() {
 	        _classCallCheck(this, Cart);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Cart).call(this, props));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Cart).apply(this, arguments));
 	    }
 	
 	    _createClass(Cart, [{
 	        key: 'removeItemFromCart',
 	        value: function removeItemFromCart(i) {
-	
-	            this.props.removeItem(this.props.cartItems, i);
+	            this.props.removeItem(this.props.cart, i);
 	        }
 	    }, {
 	        key: 'onInc',
 	        value: function onInc(i) {
-	            this.props.increaseItem(this.props.cartItems, i);
+	            this.props.increaseItemAmount(this.props.cart, i);
+	        }
+	    }, {
+	        key: 'onDec',
+	        value: function onDec(i) {
+	            this.props.decreaseItemAmount(this.props.cart, i);
+	        }
+	    }, {
+	        key: 'handleToggle',
+	        value: function handleToggle() {
+	            this.props.toggle(this.props.cart);
 	        }
 	    }, {
 	        key: 'render',
@@ -30743,10 +30754,32 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { id: 'cart' },
+	                this.props.cart.items.length <= 0 ? _react2.default.createElement(
+	                    'div',
+	                    { id: 'empty-cart-message' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'empty-cart-text' },
+	                        'You have no items your cart'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'empty-cart-link' },
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { onClick: this.handleToggle.bind(this), to: 'products' },
+	                            'Continue Shopping'
+	                        )
+	                    )
+	                ) : _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.props.cart.unavalableItems.length >= 1 ? _react2.default.createElement(_warning2.default, { unavailableItems: this.props.cart.unavalableItems }) : _react2.default.createElement('span', null)
+	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'items' },
-	                    this.props.cartItems.reduce(function (cartItems, currentItem) {
+	                    this.props.cart.items.reduce(function (cartItems, currentItem) {
 	                        var exists = cartItems.find(function (item) {
 	                            return item.productNumber === currentItem.productNumber;
 	                        });
@@ -30761,15 +30794,16 @@
 	                                'productImageName': currentItem.productImageName,
 	                                'productAvailable': currentItem.productAvailable,
 	                                'productNumber': currentItem.productNumber,
-	                                'total': 0,
-	                                'amount': 0
+	                                'total': currentItem.price,
+	                                'amount': 1
 	                            });
 	                        }
 	                        return cartItems;
 	                    }, []).map(function (item, i) {
-	
-	                        return _react2.default.createElement(_cartItem2.default, { onRemove: this.removeItemFromCart.bind(this, item.productNumber),
+	                        return _react2.default.createElement(_cartItem2.default, {
 	                            onInc: this.onInc.bind(this, item),
+	                            onRemove: this.removeItemFromCart.bind(this, item.productNumber),
+	                            onDec: this.onDec.bind(this, item.productNumber),
 	                            total: 5,
 	                            amount: item.amount,
 	                            total: item.total,
@@ -30781,13 +30815,93 @@
 	                        });
 	                    }, this)
 	                ),
-	                _react2.default.createElement(
+	                this.props.cart.items.length <= 0 ? _react2.default.createElement(
 	                    'div',
-	                    { className: 'cart-footer' },
+	                    { id: 'empty-cart-footer' },
 	                    _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        this.props.subtotalAmount
+	                        'div',
+	                        { id: 'item-quantity' },
+	                        'you have ',
+	                        this.props.cart.totalQuantity,
+	                        ' item in your cart'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'cart-subtotal' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'subtotal-text' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                'Subtotal(USD)'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'subtotal-price' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                '$',
+	                                this.props.cart.subtotalAmount
+	                            )
+	                        )
+	                    )
+	                ) : _react2.default.createElement(
+	                    'div',
+	                    { id: 'cart-footer' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'item-quantity' },
+	                        'you have ',
+	                        this.props.cart.totalQuantity,
+	                        ' item in your cart'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'cart-subtotal' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'subtotal-text' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                'Subtotal(USD)'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'subtotal-price' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                '$',
+	                                this.props.cart.subtotalAmount
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'cart-buttons' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'viewcart', className: 'cart-button' },
+	                            _react2.default.createElement(
+	                                'a',
+	                                { href: '' },
+	                                'View Cart'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'checkout', className: 'cart-button' },
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
+	                                { to: 'checkout' },
+	                                'Checkout'
+	                            )
+	                        )
 	                    )
 	                )
 	            );
@@ -30801,7 +30915,8 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        cartItems: state.cart.items
+	        cart: state.cart,
+	        unavalableItems: state.cart.unavalableItems
 	    };
 	};
 	
@@ -30811,10 +30926,16 @@
 	            dispatch(_cartActions2.default.getAllItems());
 	        },
 	        removeItem: function removeItem(cart, item) {
+	            dispatch(_cartActions2.default.removeItemFromCart(cart, item));
+	        },
+	        increaseItemAmount: function increaseItemAmount(cart, item) {
+	            dispatch(_cartActions2.default.addItem(cart, item));
+	        },
+	        decreaseItemAmount: function decreaseItemAmount(cart, item) {
 	            dispatch(_cartActions2.default.removeItem(cart, item));
 	        },
-	        increaseItem: function increaseItem(cart, item) {
-	            dispatch(_cartActions2.default.increaseItem(cart, item));
+	        toggle: function toggle(cart, item) {
+	            dispatch(_cartActions2.default.toggle(cart));
 	        }
 	    };
 	};
@@ -30870,11 +30991,11 @@
 	    }, {
 	        key: 'changeAmount',
 	        value: function changeAmount(event) {
+	            this.currentAmount = this.props.amount;
 	            if (this.currentAmount < event.target.value) {
 	                this.props.onInc();
 	            } else {
-	                console.log('remove');
-	                this.props.onRemove();
+	                this.props.onDec();
 	            }
 	        }
 	    }, {
@@ -30926,6 +31047,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'item-total' },
+	                            '$',
 	                            this.props.total
 	                        )
 	                    )
@@ -30946,18 +31068,11 @@
 	    total: _react.PropTypes.number.isRequired,
 	    available: _react.PropTypes.bool.isRequired,
 	    onRemove: _react.PropTypes.func.isRequired,
-	    onInc: _react.PropTypes.func.isRequired
+	    onInc: _react.PropTypes.func.isRequired,
+	    onDec: _react.PropTypes.func.isRequired
 	};
 	
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {};
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps() {
-	    return {};
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CartItem);
+	exports.default = CartItem;
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "cartItem.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -30969,51 +31084,181 @@
 	
 	'use strict';
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(192);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(396);
+	
+	var _reactRouter = __webpack_require__(349);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Warning = function (_Component) {
+	    _inherits(Warning, _Component);
+	
+	    function Warning() {
+	        _classCallCheck(this, Warning);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Warning).apply(this, arguments));
+	    }
+	
+	    _createClass(Warning, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'warning' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'warning-message' },
+	                    _react2.default.createElement(
+	                        'span',
+	                        null,
+	                        'Warning'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'warning-products' },
+	                    this.props.unavailableItems.map(function (item, i) {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            { key: i },
+	                            item
+	                        );
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Warning;
+	}(_react.Component);
+	
+	Warning.propTypes = {
+	    unavailableItems: _react.PropTypes.array.isRequired
+	};
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {};
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps() {
+	    return {};
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Warning);
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "warning.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 424 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	'use strict';
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	exports.default = {
-	    getAllItems: function getAllItems() {
-	        return function (dispatch) {
-	            DB().done(function (items) {
-	                console.log(items);
-	                dispatch({
-	                    type: 'GET-ALL',
-	                    items: items
-	                });
-	            });
+	    //remove every instance of object from cart
+	
+	    removeItemFromCart: function removeItemFromCart(cart, itemId) {
+	        var newCart = cart;
+	
+	        newCart.items = newCart.items.filter(function (item) {
+	
+	            if (item.productNumber != itemId) return true;
+	
+	            if (!item.productAvailable) newCart.unavalableItems.splice(newCart.unavalableItems.indexOf(item.productName), 1);
+	
+	            newCart.totalQuantity -= 1;
+	            newCart.subtotalAmount -= item.price;
+	            return false;
+	        });
+	        return {
+	            type: 'UPDATE',
+	            cart: newCart
 	        };
 	    },
+	
+	    //from one instance with productNumber
 	    removeItem: function removeItem(cart, itemId) {
-	        var newCart = cart.concat();
-	        for (var item in newCart) {
-	            if (newCart[item].productNumber == itemId) {
-	                newCart.splice(item, 1);
+	        var newCart = cart;
+	        for (var item in newCart.items) {
+	            if (newCart.items[item].productNumber == itemId) {
+	                newCart.totalQuantity -= 1;
+	                newCart.subtotalAmount -= newCart.items[item].price;
+	                newCart.items.splice(item, 1);
 	                return {
-	                    type: 'REM',
+	                    type: 'UPDATE',
 	                    cart: newCart
 	                };
 	            }
+	        }
+	    },
+	
+	    //add one instance of the item to the cart
+	    addItem: function addItem(cart, item) {
+	        var newCart = cart;
+	        if (!item.productAvailable) newCart.unavalableItems.pushUnique(item.productName);
+	        newCart.totalQuantity += 1;
+	        newCart.subtotalAmount += item.price;
+	        newCart.items.push(item);
+	        return {
+	            type: 'UPDATE',
+	            cart: newCart
 	        };
 	    },
-	    increaseItem: function increaseItem(cart, item) {
-	        var newCart = cart.concat();
-	        newCart.push(item);
+	
+	    //dropdown toggle
+	    toggle: function toggle(cart) {
+	        var newCart = cart;
+	        if (newCart.open) {
+	            newCart.open = false;
+	        } else if (!newCart.open) {
+	            newCart.open = true;
+	        }
 	        return {
-	            type: 'INC',
+	            type: 'UPDATE',
 	            cart: newCart
 	        };
 	    }
 	};
 	
-	var DB = function DB() {
-	    return $.getJSON('src/utils/dataModel.json');
+	//skip es2015 standard since this scope differs
+	
+	Array.prototype.remove = function (from, to) {
+	    var rest = this.slice((to || from) + 1 || this.length);
+	    this.length = from < 0 ? this.length + from : from;
+	    return this.push.apply(this, rest);
+	};
+	
+	Array.prototype.pushUnique = function (val) {
+	    if ($.inArray(val, this) == -1) {
+	        this.push(val);
+	    }
 	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "cartActions.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 424 */
+/* 425 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31036,6 +31281,10 @@
 	
 	var _cart2 = _interopRequireDefault(_cart);
 	
+	var _cartActions = __webpack_require__(424);
+	
+	var _cartActions2 = _interopRequireDefault(_cartActions);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31049,40 +31298,39 @@
 	var Nav = function (_Component) {
 	    _inherits(Nav, _Component);
 	
-	    function Nav(props) {
+	    function Nav() {
 	        _classCallCheck(this, Nav);
 	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Nav).call(this, props));
-	
-	        _this.handleToggle = function () {
-	            return _this.setState({ open: !_this.state.open });
-	        };
-	
-	        _this.handleClose = function () {
-	            return _this.setState({ open: false });
-	        };
-	
-	        _this.state = { open: false };
-	        return _this;
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Nav).apply(this, arguments));
 	    }
 	
 	    _createClass(Nav, [{
+	        key: 'handleToggle',
+	        value: function handleToggle() {
+	            this.props.toggle(this.props.cart);
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	
+	            var styles = {
+	                background: 'white',
+	                color: 'black'
+	            };
 	            return _react2.default.createElement(
 	                'header',
 	                null,
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'row' },
-	                    _react2.default.createElement(
+	                    this.props.cart.open ? _react2.default.createElement(
 	                        'div',
-	                        { className: 'header-item' },
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '' },
-	                            'Logo'
-	                        )
+	                        { style: styles, onClick: this.handleToggle.bind(this), className: 'header-item' },
+	                        'My Cart'
+	                    ) : _react2.default.createElement(
+	                        'div',
+	                        { onClick: this.handleToggle.bind(this), className: 'header-item' },
+	                        'My Cart'
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -31112,7 +31360,7 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement(_cart2.default, null)
+	                this.props.cart.open ? _react2.default.createElement(_cart2.default, null) : _react2.default.createElement('span', null)
 	            );
 	        }
 	    }]);
@@ -31122,12 +31370,18 @@
 	
 	Nav.propTypes = {};
 	
-	var mapStateToProps = function mapStateToProps() {
-	    return {};
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        cart: state.cart
+	    };
 	};
 	
-	var mapDispatchToProps = function mapDispatchToProps() {
-	    return {};
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        toggle: function toggle(cart) {
+	            dispatch(_cartActions2.default.toggle(cart));
+	        }
+	    };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Nav);
@@ -31135,7 +31389,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "header.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 425 */
+/* 426 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31202,7 +31456,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "home.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 426 */
+/* 427 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31223,11 +31477,11 @@
 	
 	var _reactRouter = __webpack_require__(349);
 	
-	var _productsActions = __webpack_require__(427);
+	var _productsActions = __webpack_require__(428);
 	
 	var _productsActions2 = _interopRequireDefault(_productsActions);
 	
-	var _cartActions = __webpack_require__(423);
+	var _cartActions = __webpack_require__(424);
 	
 	var _cartActions2 = _interopRequireDefault(_cartActions);
 	
@@ -31256,14 +31510,15 @@
 	    }, {
 	        key: 'addToCart',
 	        value: function addToCart(item) {
-	            this.props.addItemToCart(this.props.cart, item);
+	            console.log(item);
+	            this.props.addItem(this.props.cart, item);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'products' },
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
@@ -31271,19 +31526,24 @@
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'products' },
-	                    _react2.default.createElement(
-	                        'ul',
-	                        null,
-	                        this.props.products.map(function (item, i) {
-	                            return _react2.default.createElement(
-	                                'li',
+	                    { className: 'products-grid' },
+	                    this.props.products.map(function (item, i) {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            { className: 'col-1-2' },
+	                            _react2.default.createElement(
+	                                'div',
 	                                { key: i },
-	                                item.productName,
-	                                _react2.default.createElement('button', { onClick: this.addToCart(item) })
-	                            );
-	                        }, this)
-	                    )
+	                                _react2.default.createElement('img', { src: 'src/utils/ProductImages/' + item.productImageName, width: '100', height: '100', alt: '' }),
+	                                _react2.default.createElement('img', { id: 'add', onClick: this.addToCart.bind(this, item), src: 'src/utils/cart.png', alt: '' })
+	                            ),
+	                            _react2.default.createElement(
+	                                'span',
+	                                null,
+	                                item.productName
+	                            )
+	                        );
+	                    }, this)
 	                )
 	            );
 	        }
@@ -31297,7 +31557,7 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
 	        products: state.products.items,
-	        cart: state.cart.items
+	        cart: state.cart
 	    };
 	};
 	
@@ -31306,8 +31566,8 @@
 	        getItems: function getItems() {
 	            dispatch(_productsActions2.default.getAllItems());
 	        },
-	        addItemToCart: function addItemToCart(cart, item) {
-	            dispatch(_cartActions2.default.addToCart(cart, item));
+	        addItem: function addItem(cart, item) {
+	            dispatch(_cartActions2.default.addItem(cart, item));
 	        }
 	    };
 	};
@@ -31317,7 +31577,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "products.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 427 */
+/* 428 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31337,14 +31597,6 @@
 	                });
 	            });
 	        };
-	    },
-	    addToCart: function addToCart(cart, item) {
-	        var newCart = cart.concat();
-	        newCart.push(item);
-	        return {
-	            type: 'ADD-TO-CART',
-	            cart: newCart
-	        };
 	    }
 	};
 	
@@ -31353,6 +31605,63 @@
 	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "productsActions.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 429 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(192);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(396);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Checkout = function (_Component) {
+	    _inherits(Checkout, _Component);
+	
+	    function Checkout() {
+	        _classCallCheck(this, Checkout);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Checkout).apply(this, arguments));
+	    }
+	
+	    _createClass(Checkout, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Checkout!'
+	            );
+	        }
+	    }]);
+	
+	    return Checkout;
+	}(_react.Component);
+	
+	Checkout.propTypes = {};
+	
+	exports.default = Checkout;
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/erikmagnusson/WebstormProjects/InforWorkSample/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "checkout.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ }
 /******/ ]);
