@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import React, { PropTypes, Component } from 'react';
-import { Link }  from 'react-router';
 import Cart from './cart'
 
 //import actions from '../actions';
@@ -19,21 +18,15 @@ class Nav extends Component {
 
     render() {
         return (
-            <nav>
+            <header>
                 <div className="row">
-                    <div className="logo">
-                        <a href="">LOGO</a>
-                    </div>
-                    <div className="nav-items">
-                        <div className="nav-item">
-                            <Link to="products">Products</Link>
-                        </div>
-                        <div className="nav-item"><Link to="/">Logout</Link></div>
-                        <div className="nav-item"><a href="">About Us</a></div>
-                        <div className="nav-item"><a href="">Brands</a></div>
-                    </div>
+                    <div className="header-item"><a href="">Logo</a></div>
+                    <div className="header-item"><a href="">My Account</a></div>
+                    <div className="header-item"><a href="">Currency($)</a></div>
+                    <div className="header-item"><a href="">Language(EN)</a></div>
                 </div>
-            </nav>
+                <Cart />
+            </header>
         );
     }
 }

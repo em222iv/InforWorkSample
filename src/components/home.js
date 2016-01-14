@@ -6,9 +6,7 @@ import { Link } from 'react-router';
 class Home extends Component {
     render() {
         return (
-            <div className="main header">
-               <h1>Home</h1>
-            </div>
+           <h1>Home</h1>
         );
     }
 }

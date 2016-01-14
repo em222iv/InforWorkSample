@@ -9,11 +9,11 @@ class CartItem extends Component {
     }
 
     changeAmount(event) {
+        this.currentAmount = this.props.amount;
         if(this.currentAmount < event.target.value){
             this.props.onInc();
         }else {
-            console.log('remove');
-            this.props.onRemove();
+            this.props.onDec();
         }
     }
 
@@ -52,18 +52,7 @@ CartItem.propTypes = {
     available: PropTypes.bool.isRequired,
     onRemove: PropTypes.func.isRequired,
     onInc: PropTypes.func.isRequired,
+    onDec: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
-    return {
-
-    }
-
-};
-
-const mapDispatchToProps = () => {
-    return {
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CartItem);
+export default CartItem;

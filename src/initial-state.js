@@ -2,7 +2,11 @@ module.exports = function(){
     return {
         cart: {
             items: [],
-            totalAmount:0
+            subtotalAmount:0,
+            unavalableItems: []
+        },
+        products: {
+            items: []
         }
     }
 };

@@ -1,12 +1,12 @@
 body{
     margin:0;
 }
-nav {
+header {
     background-color: darkblue;
     width:100%;
     height:40px;
 }
-nav .row .nav-item {
+header .row .header-item {
     float:right;
     transition: background-color .3s;
     font-size: 1rem;
@@ -16,7 +16,7 @@ nav .row .nav-item {
     cursor: pointer;
     line-height: 40px;
 }
-nav .row .nav-item a {
+header .row .header-item a {
     color:white;
     text-decoration: none;
 }
@@ -76,7 +76,32 @@ nav .row .nav-item a {
     width: 100%;
     text-align: center;
 }
-nav input {
+header input {
     width:30px;
     padding:5px;
+}
+
+nav .row .nav-item {
+    float:left;
+    transition: background-color .3s;
+    font-size: 1rem;
+    color: #fff;
+    display: block;
+    padding: 0 15px;
+    line-height: 40px;
+}
+
+#warning {
+    border: 1px solid orange;
+}
+
+#warning-message{
+    padding:5px;
+    background-color:orange;
+    color:white;
+}
+
+#warning-products{
+    padding:10px;
+    font-size: 70%;
 }
