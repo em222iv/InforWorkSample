@@ -34,7 +34,7 @@ class CartItem extends Component {
                             ? <input onChange={this.changeAmount.bind(this)} value={this.props.amount} type="number" />
                             : <span>This product is no longer available.</span>
                         )}
-                        <div className="item-total">{this.props.total}</div>
+                        <div className="item-total">${this.props.total}</div>
                     </div>
                 </div>
             </div>

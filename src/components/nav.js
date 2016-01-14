@@ -21,16 +21,16 @@ class Nav extends Component {
         return (
             <nav>
                 <div className="row">
-                    <div className="logo">
+                    <div id="logo">
                         <a href="">LOGO</a>
                     </div>
                     <div className="nav-items">
                         <div className="nav-item">
-                            <Link to="products">Products</Link>
+                            <Link to="products">PRODUCTS</Link>
                         </div>
-                        <div className="nav-item"><Link to="/">Logout</Link></div>
-                        <div className="nav-item"><a href="">About Us</a></div>
-                        <div className="nav-item"><a href="">Brands</a></div>
+                        <div className="nav-item"><Link to="/">CAMPAIGNS & PROMOTIONS</Link></div>
+                        <div className="nav-item"><a href="">ABOUT US</a></div>
+                        <div className="nav-item"><a href="">BRANDS</a></div>
                     </div>
                 </div>
             </nav>

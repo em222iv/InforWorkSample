@@ -5,7 +5,6 @@ const cartReducer = function(state, action){
     switch(action.type){
         case 'UPDATE':
             newState.cart = action.cart;
-            console.log(newState.cart);
             return newState;
         default:
             return state || initialState().cart;

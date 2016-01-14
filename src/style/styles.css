@@ -1,10 +1,25 @@
 body{
     margin:0;
 }
+.centered {
+    clear:both;
+    width: 75%;
+    text-align: center;
+}
+@media (max-width: 600px) {
+    #cart {
+        width:100%;
+        height:100%;
+        margin:40px 0 0 0 !important;
+
+    }
+}
+/*header*/
 header {
     background-color: darkblue;
     width:100%;
     height:40px;
+    margin-bottom: 20px;
 }
 header .row .header-item {
     float:right;
@@ -12,32 +27,127 @@ header .row .header-item {
     font-size: 1rem;
     color: #fff;
     display: block;
-    padding: 0 15px;
+    padding: 0 25px 0 25px;
     cursor: pointer;
     line-height: 40px;
+    border-left:1px solid #0086b3;
+    margin-right:10px;
+}
+header .row .header-item:last-child {
+  margin-right:10px;
 }
 header .row .header-item a {
     color:white;
     text-decoration: none;
 }
+header input {
+    width:30px;
+    padding:5px;
+}
 /*Cart*/
 #cart {
-    border:1px solid black;
+    max-height: 400px;
+    overflow: scroll;
+    border:2px solid gainsboro;
     position: absolute;
     background-color: white;
     right:0;
     margin: 40px 10px 0px 0px;
 }
 #cart .items {
-    padding: 20px;
-    text-decoration: none;
-    width:350px;
-    min-height:200px;
-    max-height: 400px;
-    overflow: scroll;
+     padding: 20px 20px 0 20px;
+     text-decoration: none;
+     width:350px;
+     max-height: 400px;
+     overflow: scroll;
 }
+#empty-cart-message{
+    padding:10px;
+}
+#empty-cart-text{
+    font-size:80%;
+    font-weight: bold;
+}
+#empty-cart-link a{
+    text-decoration: none;
+    color:deepskyblue;
+}
+/*cart footer*/
+#cart-footer {
+    margin-top: -2px;
+    background-color: gainsboro;
+    border-top:2px solid gainsboro;
+    width: 100%;
+    height: 115px
+}
+#empty-cart-footer {
+    border-top:2px solid grey;
+    margin: auto;
+    width: 90%;
+}
+
+#cart-footer .row{
+    float:right;
+    width:100%;
+}
+
+#item-quantity{
+    margin-left:10px;
+    margin-top:10px;
+    font-size: 70%;
+}
+#cart-subtotal {
+
+    height: 50px;
+}
+#subtotal-text{
+    color:black;
+    margin-left:10px;
+    text-align: left;
+    float: left;
+}
+
+#subtotal-price{
+    color:black;
+    margin-right: 10px;
+    text-align: right;
+    float: right;
+}
+
+#cart-buttons{
+    float:left;
+    height:30px;
+    width:100%
+}
+.cart-button{
+    text-align: center;
+    height:100%;
+    width:50%;
+}
+#checkout {
+    float:right;
+}
+#viewcart{
+    float:left;
+}
+#viewcart a {
+    background-color: grey;
+}
+
+#checkout a {
+    background-color: #00AFEF;
+}
+.cart-button a {
+    padding: 5px 50px 5px 50px;
+    width:50px;
+    height:100%;
+    text-decoration: none;
+    color:white;
+}
+
+
 .cart-item{
-    border-bottom: 1px solid grey;
+    border-bottom: 2px solid gainsboro;
 }
 
 .cart-item .row {
@@ -53,44 +163,68 @@ header .row .header-item a {
 .cart-item .row .item-title {
     margin-top:4px;
     font-weight: bold;
+    font-size: 75%;
+    max-height: 30px;
+    overflow: hidden;
 }
 .item-remove {
     width:10%;
 }
 .item-title {
-    width:60%
+    width: 55%;
 }
 .item-image {
     width: 30%;
     text-align: center;
 }
 .item-price {
-    width: 100%;
-    text-align: center;
 }
 .item-total{
     float:right !important;
 }
-.centered {
-    clear:both;
-    width: 100%;
-    text-align: center;
-}
-header input {
-    width:30px;
-    padding:5px;
+
+
+/*nav*/
+nav{
+    height: 50px;
 }
 
-nav .row .nav-item {
+#logo {
+    background-color: lightgray;
     float:left;
-    transition: background-color .3s;
+    margin-left:7%;
     font-size: 1rem;
     color: #fff;
     display: block;
     padding: 0 15px;
     line-height: 40px;
+    margin-right: 7%;
+    padding:5px 50px 5px 5px;
+}
+#logo a {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    color:black;
+}
+nav .row .nav-item {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    float: right;
+    font-size: 1rem;
+    color: #fff;
+    display: block;
+    padding: 0 15px;
+    line-height: 40px;
+    margin-right: 7%;
+
+}
+nav .row .nav-item a {
+    font-weight: 600;
+    text-decoration: none;
+    color:black;
 }
 
+/*warning*/
 #warning {
     border: 1px solid orange;
 }
@@ -104,4 +238,31 @@ nav .row .nav-item {
 #warning-products{
     padding:10px;
     font-size: 70%;
+}
+/*products*/
+.products {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 95%;
+    background-color: #fff;
+}
+.products-grid {
+    padding: 50px;
+    margin-left: 25%;
+}
+.products h1{
+    text-align: center;
+}
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+@media ( min-width: 600px ) {
+    .col-1-2 {
+        float: left;
+        width: 50%;
+    }
+}
+#add:active {
+    background-color: grey;
 }

@@ -8,10 +8,6 @@ import store from '../store';
 
 class Cart extends Component {
 
-    constructor(props){
-        super(props)
-    }
-
     removeItemFromCart(i) {
         this.props.removeItem(this.props.cart,i);
     }
@@ -24,11 +20,20 @@ class Cart extends Component {
         this.props.decreaseItemAmount(this.props.cart,i);
     }
 
+    handleToggle(){
+        this.props.toggle(this.props.cart)
+    };
+
     render() {
         return (
             <div id="cart">
                 {(this.props.cart.items.length <= 0
-                        ? <div>no items. <a href="">continue shoptting</a></div>
+                        ? <div id="empty-cart-message">
+                            <div id="empty-cart-text">You have no items your cart</div>
+                            <div id="empty-cart-link">
+                                <Link onClick={this.handleToggle.bind(this)} to="products">Continue Shopping</Link>
+                            </div>
+                          </div>
                         : <div>
                             {(this.props.cart.unavalableItems.length >= 1
                                 ? <Warning unavailableItems={this.props.cart.unavalableItems} />
@@ -78,9 +83,30 @@ class Cart extends Component {
                         }, this)
                     }
                 </div>
-                <div className="cart-footer">
-                    <h2>{this.props.subtotalAmount}</h2>
-                </div>
+                {(this.props.cart.items.length <= 0
+                        ? <div id="empty-cart-footer">
+                            <div id="item-quantity">you have {this.props.cart.totalQuantity} item in your cart</div>
+                            <div id="cart-subtotal">
+                                <div id="subtotal-text"><h4>Subtotal(USD)</h4></div>
+                                <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
+                            </div>
+                        </div>
+                        : <div id="cart-footer">
+                            <div id="item-quantity">you have {this.props.cart.totalQuantity} item in your cart</div>
+                            <div id="cart-subtotal">
+                                <div id="subtotal-text"><h4>Subtotal(USD)</h4></div>
+                                <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
+                            </div>
+                            <div id="cart-buttons">
+                                <div id="viewcart" className="cart-button">
+                                    <a href="">View Cart</a>
+                                </div>
+                                <div id="checkout" className="cart-button">
+                                    <Link to="checkout">Checkout</Link>
+                                </div>
+                            </div>
+                        </div>
+                )}
             </div>
         );
     }
@@ -109,6 +135,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         decreaseItemAmount: (cart,item) => {
             dispatch(actions.removeItem(cart,item));
+        },
+        toggle: (cart,item) => {
+            dispatch(actions.toggle(cart));
         }
     };
 };

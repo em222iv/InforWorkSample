@@ -3,7 +3,9 @@ module.exports = function(){
         cart: {
             items: [],
             subtotalAmount:0,
-            unavalableItems: []
+            totalQuantity:0,
+            unavalableItems: [],
+            open: false
         },
         products: {
             items: []
