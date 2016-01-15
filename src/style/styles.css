@@ -229,6 +229,10 @@ header input {
     float:right !important;
     margin-right: -45px!important;
 }
+#not-available{
+    color: tomato;
+    font-size: 85%;
+}
 .small-round {
     -webkit-border-top-left-radius: 16px;
     -webkit-border-top-right-radius: 16px;
@@ -287,12 +291,12 @@ nav .row .nav-item a {
 
 /*warning*/
 #warning {
-    border: 1px solid orange;
+    border: 1px solid tomato;
 }
 
 #warning-message{
     padding:5px;
-    background-color:orange;
+    background-color:tomato;
     color:white;
 }
 

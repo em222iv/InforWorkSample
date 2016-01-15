@@ -23,7 +23,7 @@ export default {
             cart: newCart
         };
     },
-    //decrease the number of items
+    //decrease the number of items in cart
     removeItem(cart,itemId) {
         let newCart = cart;
         for (let item in newCart.items) {
@@ -41,7 +41,7 @@ export default {
             }
         }
     },
-    //add item or increase amount
+    //add item or increase amount of item in cart
     addItem(cart,item) {
         let newCart = cart;
         if(!item.productAvailable)//pushes if productName does not already exist

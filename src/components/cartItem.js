@@ -26,13 +26,24 @@ class CartItem extends Component {
                     <div onClick={this.props.onRemove} className="item-remove small-round">x</div>
                 </div>
                 <div className="row">
-                    <div className="item-price">${this.props.price}</div>
+
+                    {(this.props.available
+                            ? <div className="item-price">${this.props.price}</div>
+                            : <div id="not-available">
+                                <div>
+                                    This product is no longer available
+                                </div>
+                                <div>
+                                    Please remove it from your cart
+                                </div>
+                            </div>
+                    )}
                 </div>
                 <div className="row">
                     <div className="centered">
                         {(this.props.available
                             ? <input onChange={this.changeAmount.bind(this)} value={this.props.amount} type="number" />
-                            : <span>This product is no longer available.</span>
+                            : <div></div>
                         )}
                         <div className="item-total">${this.props.total}</div>
                     </div>
