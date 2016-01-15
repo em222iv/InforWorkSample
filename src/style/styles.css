@@ -86,8 +86,7 @@ header input {
 }
 /*Cart*/
 #cart {
-    max-height: 400px;
-    overflow: scroll;
+    max-height: 450px;
     border:2px solid gainsboro;
     position: absolute;
     background-color: white;
@@ -98,7 +97,7 @@ header input {
      padding: 20px 20px 0 20px;
      text-decoration: none;
      width:350px;
-     max-height: 400px;
+     max-height: 300px;
      overflow: scroll;
 }
 #empty-cart-message{
@@ -291,6 +290,7 @@ nav .row .nav-item a {
 
 /*warning*/
 #warning {
+    position: static;
     border: 1px solid tomato;
 }
 
