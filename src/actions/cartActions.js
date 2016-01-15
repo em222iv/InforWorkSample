@@ -1,21 +1,21 @@
 export default {
-    //remove every instance of object from cart
+    //remove item from cart
     removeItemFromCart(cart,itemId) {
         let newCart = cart;
-
+        //filter through cart
         newCart.items = newCart.items.filter((item) =>{
-
+            //if it the wrong item, keep it
             if(item.productNumber != itemId)
                 return true;
-
-            if(!item.productAvailable)
+            //if the item is not available, remove it
+            if(!item.productAvailable)//TODO: something prettier than splice
                 newCart.unavailableItems.splice(newCart.unavailableItems.indexOf(item.productName),1);
-
+            //change cart values
             newCart.totalQuantity -= item.amount;
             newCart.subtotalAmount -= item.total;
             item.total = 0;
             item.amount = 0;
-
+            //do not keep it
             return false;
         });
         return {
@@ -23,32 +23,36 @@ export default {
             cart: newCart
         };
     },
-
+    //decrease the number of items
     removeItem(cart,itemId) {
         let newCart = cart;
-            for (let item in newCart.items) {
-                if (newCart.items[item].productNumber == itemId) {
-                    newCart.totalQuantity -= 1;
-                    newCart.subtotalAmount -= newCart.items[item].price;
-                    newCart.items[item].amount -= 1;
-                    newCart.items[item].total = newCart.items[item].price * newCart.items[item].amount;
-                    return {
-                        type: 'UPDATE',
-                        cart: newCart
-                    };
-                }
+        for (let item in newCart.items) {
+            //if the product exists in cart
+            if (newCart.items[item].productNumber == itemId) {
+                //decrease/calculate the cart values
+                newCart.totalQuantity -= 1;
+                newCart.subtotalAmount -= newCart.items[item].price;
+                newCart.items[item].amount -= 1;
+                newCart.items[item].total = newCart.items[item].price * newCart.items[item].amount;
+                return {
+                    type: 'UPDATE',
+                    cart: newCart
+                };
+            }
         }
     },
-
+    //add item or increase amount
     addItem(cart,item) {
         let newCart = cart;
-        if(!item.productAvailable)
+        if(!item.productAvailable)//pushes if productName does not already exist
             newCart.unavailableItems.pushUnique(item.productName);
+
+        //if array is empty, add item
+        //else increase amount                 //initiates cart object vatiables //increments if exsts, else adds item
+        newCart.items.length == 0 ? newCart.items.push(addToObject(item)) : newCart.items.incrementPush(item);
         newCart.totalQuantity += 1;
         newCart.subtotalAmount += item.price;
 
-        newCart.items.length == 0 ? newCart.items.push(addToObject(item)) : newCart.items.reducePush(item);
-        console.log(newCart.items);
         return {
             type: 'UPDATE',
             cart: newCart
@@ -69,18 +73,21 @@ export default {
     }
 
 }
-
-Array.prototype.reducePush = function (item){
+//increments if exsts, else adds item
+Array.prototype.incrementPush = function (item){
     for (var i = 0; i < this.length; i++) {
-        console.log(this[i].productNumber,item.productNumber);
+        //if product exists in cart
         if (this[i].productNumber === item.productNumber) {
+            //increment data
             item.amount++;
             item.total =  item.price * item.amount;
             return;
         }
     }
+    //else push item
     this.push(addToObject(item));
 };
+//creates amount and total attributes on the cart item
 function addToObject(item) {
     let newItem = item;
     newItem.amount = 1;
@@ -88,10 +95,10 @@ function addToObject(item) {
     return newItem;
 
 }
-
-Array.prototype.pushUnique = function (val){
-    if ($.inArray(val, this) == -1) {
-        this.push(val);
+//pushes if item does not already exist in cart
+Array.prototype.pushUnique = function (item){
+    if ($.inArray(item, this) == -1) {
+        this.push(item);
     }
 };
 

@@ -7,7 +7,7 @@ class Home extends Component {
     render() {
         return (
             <div id="home">
-                <h1>Home Content</h1>
+                <h1>HomePage Content</h1>
             </div>
         );
     }
@@ -16,15 +16,4 @@ class Home extends Component {
 Home.propTypes = {
 };
 
-const mapStateToProps = (state) => {
-    return {
-    }
-
-};
-
-const mapDispatchToProps = () => {
-    return {
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

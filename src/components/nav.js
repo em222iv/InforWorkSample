@@ -3,9 +3,6 @@ import React, { PropTypes, Component } from 'react';
 import { Link }  from 'react-router';
 import Cart from './cart'
 
-//import actions from '../actions';
-
-
 class Nav extends Component {
 
     render() {
@@ -32,12 +29,4 @@ class Nav extends Component {
 Nav.propTypes = {
 };
 
-const mapStateToProps = () => {
-    return {};
-};
-
-const mapDispatchToProps = () => {
-    return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Nav);
+export default Nav;

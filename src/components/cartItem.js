@@ -23,7 +23,7 @@ class CartItem extends Component {
                 <div className="row">
                     <div className="item-image"><img src={'src/utils/ProductImages/'+this.props.image} width="60" height="60" alt=""/></div>
                     <div className="item-title">{this.props.name}</div>
-                    <div onClick={this.props.onRemove} className="item-remove">x</div>
+                    <div onClick={this.props.onRemove} className="item-remove small-round">x</div>
                 </div>
                 <div className="row">
                     <div className="item-price">${this.props.price}</div>

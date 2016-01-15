@@ -13,7 +13,6 @@ class Nav extends Component {
     };
 
     render() {
-
         var styles = {
             background:'white',
             color:'black'
