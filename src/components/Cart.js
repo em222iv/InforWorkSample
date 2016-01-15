@@ -5,6 +5,7 @@ import CartItem from './cartItem';
 import Warning from './warning';
 import actions from '../actions/cartActions';
 import store from '../store';
+import CartFooter from './cartFooter';
 
 class Cart extends Component {
 
@@ -17,6 +18,12 @@ class Cart extends Component {
     }
 
     onDec(i) {
+        for(let item in this.props.cart.items){
+            if(this.props.cart.items[item].productNumber == i){
+                if(this.props.cart.items[item].amount == 1)
+                    return this.props.removeItem(this.props.cart,i);
+            }
+        };
         this.props.decreaseItemAmount(this.props.cart,i);
     }
 
@@ -35,35 +42,14 @@ class Cart extends Component {
                             </div>
                           </div>
                         : <div>
-                            {(this.props.cart.unavalableItems.length >= 1
-                                ? <Warning unavailableItems={this.props.cart.unavalableItems} />
+                            {(this.props.cart.unavailableItems.length >= 1
+                                ? <Warning />
                                 : <span></span>
                             )}
                           </div>
                     )}
-
                 <div className="items">
                     {this.props.cart.items
-                        .reduce((cartItems, currentItem) => {
-                            let exists = cartItems.find(item => item.productNumber === currentItem.productNumber);
-                            if (exists) {
-                                exists.amount++;
-                                exists.total = currentItem.price * exists.amount;
-                            }
-                            else {
-                                cartItems.push({
-                                    'productName': currentItem.productName,
-                                    'price': currentItem.price,
-                                    'count': 1,
-                                    'productImageName': currentItem.productImageName,
-                                    'productAvailable': currentItem.productAvailable,
-                                    'productNumber': currentItem.productNumber,
-                                    'total': currentItem.price,
-                                    'amount':1
-                                });
-                            }
-                            return cartItems;
-                        }, [])
                         .map(function(item, i) {
                             return (
                                 <CartItem
@@ -91,21 +77,7 @@ class Cart extends Component {
                             <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
                         </div>
                     </div>
-                    : <div id="cart-footer">
-                        <div id="item-quantity">you have {this.props.cart.totalQuantity} item in your cart</div>
-                        <div id="cart-subtotal">
-                            <div id="subtotal-text"><h4>Subtotal(USD)</h4></div>
-                            <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
-                        </div>
-                        <div id="cart-buttons">
-                            <div id="viewcart" className="cart-button">
-                                <Link onClick={this.handleToggle.bind(this)} to="/cartview">View Cart</Link>
-                            </div>
-                            <div id="checkout" className="cart-button">
-                                <Link onClick={this.handleToggle.bind(this)} to="/checkout">Checkout</Link>
-                            </div>
-                        </div>
-                    </div>
+                    : <CartFooter />
                 )}
             </div>
         );
@@ -118,15 +90,12 @@ Cart.propTypes = {
 const mapStateToProps = (state) => {
     return {
         cart: state.cart,
-        unavalableItems: state.cart.unavalableItems
+        unavailableItems: state.cart.unavailableItems
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getItems: () => {
-            dispatch(actions.getAllItems());
-        },
         removeItem: (cart,item) => {
             dispatch(actions.removeItemFromCart(cart,item));
         },
@@ -136,7 +105,7 @@ const mapDispatchToProps = (dispatch) => {
         decreaseItemAmount: (cart,item) => {
             dispatch(actions.removeItem(cart,item));
         },
-        toggle: (cart,item) => {
+        toggle: (cart) => {
             dispatch(actions.toggle(cart));
         }
     };

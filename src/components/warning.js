@@ -8,7 +8,7 @@ class Warning extends Component {
         return (
             <div id="warning">
                 <div id="warning-message">
-                    <span>Warning</span>
+                    <span>1 Unavailable product</span>
                 </div>
                 <div id="warning-products">
                     {this.props.unavailableItems.map(function(item,i) {
@@ -21,11 +21,12 @@ class Warning extends Component {
 }
 
 Warning.propTypes = {
-    unavailableItems: PropTypes.array.isRequired
 };
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        unavailableItems: state.cart.unavailableItems
+    }
 };
 
 const mapDispatchToProps = () => {

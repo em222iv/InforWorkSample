@@ -6,7 +6,7 @@ body{
     width: 75%;
     text-align: center;
 }
-@media (max-width: 700px) {
+@media (max-width: 600px) {
     header .row .header-item  {
         float: right;
         font-size: 1rem;
@@ -23,8 +23,8 @@ body{
         margin-right:0 !important;
     }
     #cart {
-        width:100%;
-        height:100%;
+        width:100% !important;
+        height:100% !important;
         margin:40px 0 0 0 !important;
 
     }
@@ -42,6 +42,9 @@ body{
     }
     nav .row .nav-item{
         float:left !important;
+    }
+    #viewcart {
+        font-size: 70%;
     }
 }
 .products h1, #home h1, .checkout h1{

@@ -4,7 +4,7 @@ module.exports = function(){
             items: [],
             subtotalAmount:0,
             totalQuantity:0,
-            unavalableItems: [],
+            unavailableItems: [],
             open: false
         },
         products: {

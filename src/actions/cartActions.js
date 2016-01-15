@@ -9,10 +9,13 @@ export default {
                 return true;
 
             if(!item.productAvailable)
-                newCart.unavalableItems.splice(newCart.unavalableItems.indexOf(item.productName),1);
+                newCart.unavailableItems.splice(newCart.unavailableItems.indexOf(item.productName),1);
 
-            newCart.totalQuantity -= 1;
-            newCart.subtotalAmount -= item.price;
+            newCart.totalQuantity -= item.amount;
+            newCart.subtotalAmount -= item.total;
+            item.total = 0;
+            item.amount = 0;
+
             return false;
         });
         return {
@@ -20,14 +23,15 @@ export default {
             cart: newCart
         };
     },
-    //from one instance with productNumber
+
     removeItem(cart,itemId) {
         let newCart = cart;
             for (let item in newCart.items) {
                 if (newCart.items[item].productNumber == itemId) {
                     newCart.totalQuantity -= 1;
                     newCart.subtotalAmount -= newCart.items[item].price;
-                    newCart.items.splice(item,1);
+                    newCart.items[item].amount -= 1;
+                    newCart.items[item].total = newCart.items[item].price * newCart.items[item].amount;
                     return {
                         type: 'UPDATE',
                         cart: newCart
@@ -35,14 +39,16 @@ export default {
                 }
         }
     },
-    //add one instance of the item to the cart
+
     addItem(cart,item) {
         let newCart = cart;
         if(!item.productAvailable)
-            newCart.unavalableItems.pushUnique(item.productName);
+            newCart.unavailableItems.pushUnique(item.productName);
         newCart.totalQuantity += 1;
         newCart.subtotalAmount += item.price;
-        newCart.items.push(item);
+
+        newCart.items.length == 0 ? newCart.items.push(addToObject(item)) : newCart.items.reducePush(item);
+        console.log(newCart.items);
         return {
             type: 'UPDATE',
             cart: newCart
@@ -64,15 +70,28 @@ export default {
 
 }
 
-//skip es2015 standard since this scope differs
-Array.prototype.remove = function(from, to) {
-    let rest = this.slice((to || from) + 1 || this.length);
-    this.length = from < 0 ? this.length + from : from;
-    return this.push.apply(this, rest);
+Array.prototype.reducePush = function (item){
+    for (var i = 0; i < this.length; i++) {
+        console.log(this[i].productNumber,item.productNumber);
+        if (this[i].productNumber === item.productNumber) {
+            item.amount++;
+            item.total =  item.price * item.amount;
+            return;
+        }
+    }
+    this.push(addToObject(item));
 };
+function addToObject(item) {
+    let newItem = item;
+    newItem.amount = 1;
+    newItem.total = item.price;
+    return newItem;
+
+}
 
 Array.prototype.pushUnique = function (val){
     if ($.inArray(val, this) == -1) {
         this.push(val);
     }
-}
+};
+

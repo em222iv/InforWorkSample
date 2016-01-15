@@ -12,7 +12,6 @@ class Products extends Component {
     }
 
     addToCart(item){
-        console.log(item);
         this.props.addItem(this.props.cart,item)
     }
 
@@ -22,13 +21,12 @@ class Products extends Component {
                     <h1>Products Page</h1>
                     <div className="products-grid">
                         {this.props.products .map(function(item, i) {
-                            return <div className="col-1-2">
-                                <div key={i}>
+                            return <div  key={i} className="col-1-2">
+                                <div>
                                     <img src={'src/utils/ProductImages/'+item.productImageName} width="100" height="100" alt=""/>
                                     <img id="add" onClick={this.addToCart.bind(this,item)} src="src/utils/cart.png" alt=""/>
                                 </div>
                                 <span>{item.productName}</span>
-
                             </div>
                             },this)
                         }
