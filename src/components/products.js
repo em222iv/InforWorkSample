@@ -30,7 +30,7 @@ class Products extends Component {
                                 <span>{item.productName}</span>
 
                             </div>
-                            }, this)
+                            },this)
                         }
                     </div>
                 </div>

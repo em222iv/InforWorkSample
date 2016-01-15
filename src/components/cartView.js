@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-class Checkout extends Component {
+class CartView extends Component {
     render() {
         return (
             <div className="checkout">
-                <h1>This is where the checkout would be!</h1>
+                <h1>This is where the cart would be!</h1>
             </div>
         );
     }
 }
 
-Checkout.propTypes = {};
+CartView.propTypes = {};
 
-export default Checkout;
+export default CartView;

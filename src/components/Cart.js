@@ -84,28 +84,28 @@ class Cart extends Component {
                     }
                 </div>
                 {(this.props.cart.items.length <= 0
-                        ? <div id="empty-cart-footer">
-                            <div id="item-quantity">you have {this.props.cart.totalQuantity} item in your cart</div>
-                            <div id="cart-subtotal">
-                                <div id="subtotal-text"><h4>Subtotal(USD)</h4></div>
-                                <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
+                    ? <div id="empty-cart-footer">
+                        <div id="item-quantity">you have {this.props.cart.totalQuantity} item in your cart</div>
+                        <div id="cart-subtotal">
+                            <div id="subtotal-text"><h4>Subtotal(USD)</h4></div>
+                            <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
+                        </div>
+                    </div>
+                    : <div id="cart-footer">
+                        <div id="item-quantity">you have {this.props.cart.totalQuantity} item in your cart</div>
+                        <div id="cart-subtotal">
+                            <div id="subtotal-text"><h4>Subtotal(USD)</h4></div>
+                            <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
+                        </div>
+                        <div id="cart-buttons">
+                            <div id="viewcart" className="cart-button">
+                                <Link onClick={this.handleToggle.bind(this)} to="/cartview">View Cart</Link>
+                            </div>
+                            <div id="checkout" className="cart-button">
+                                <Link onClick={this.handleToggle.bind(this)} to="/checkout">Checkout</Link>
                             </div>
                         </div>
-                        : <div id="cart-footer">
-                            <div id="item-quantity">you have {this.props.cart.totalQuantity} item in your cart</div>
-                            <div id="cart-subtotal">
-                                <div id="subtotal-text"><h4>Subtotal(USD)</h4></div>
-                                <div id="subtotal-price"><h4>${this.props.cart.subtotalAmount}</h4></div>
-                            </div>
-                            <div id="cart-buttons">
-                                <div id="viewcart" className="cart-button">
-                                    <a href="">View Cart</a>
-                                </div>
-                                <div id="checkout" className="cart-button">
-                                    <Link to="checkout">Checkout</Link>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
                 )}
             </div>
         );

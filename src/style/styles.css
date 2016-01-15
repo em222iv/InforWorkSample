@@ -6,13 +6,50 @@ body{
     width: 75%;
     text-align: center;
 }
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+    header .row .header-item  {
+        float: right;
+        font-size: 1rem;
+        padding: 0 0 0 5px !important;
+        line-height: 40px  !important;
+        border-left:none !important;
+        margin-right:0 !important;
+    }
+    header .row .header-item a {
+       font-size: 95%;
+    }
+    header .row .header-item:last-child {
+        transition: background-color .3s;
+        margin-right:0 !important;
+    }
     #cart {
         width:100%;
         height:100%;
         margin:40px 0 0 0 !important;
 
     }
+    #logo {
+        display:none !important;
+    }
+    #logo a {
+        display:none;
+    }
+    .nav-item{
+         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+     }
+    .nav-item a {
+        font-size: 50%;
+    }
+    nav .row .nav-item{
+        float:left !important;
+    }
+}
+.products h1, #home h1, .checkout h1{
+    text-align: center;
+}
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
 }
 /*header*/
 header {
@@ -23,7 +60,6 @@ header {
 }
 header .row .header-item {
     float:right;
-    transition: background-color .3s;
     font-size: 1rem;
     color: #fff;
     display: block;
@@ -34,6 +70,7 @@ header .row .header-item {
     margin-right:10px;
 }
 header .row .header-item:last-child {
+  transition: background-color .3s;
   margin-right:10px;
 }
 header .row .header-item a {
@@ -65,10 +102,12 @@ header input {
     padding:10px;
 }
 #empty-cart-text{
+    padding:10px;
     font-size:80%;
     font-weight: bold;
 }
 #empty-cart-link a{
+    padding:10px;
     text-decoration: none;
     color:deepskyblue;
 }
@@ -249,13 +288,6 @@ nav .row .nav-item a {
 .products-grid {
     padding: 50px;
     margin-left: 25%;
-}
-.products h1{
-    text-align: center;
-}
-h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
 }
 @media ( min-width: 600px ) {
     .col-1-2 {
